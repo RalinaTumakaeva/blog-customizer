@@ -45,7 +45,6 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
   const rootRef = useRef<HTMLElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  // Функция закрытия по Escape
   const handleClose = (): void => {
     setIsMenuOpen(false);
   };
