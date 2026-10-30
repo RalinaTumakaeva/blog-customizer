@@ -45,6 +45,7 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 
   const handleReset = (): void => {
     setDraft(defaultArticleState);
+    setArticleState(defaultArticleState);
   };
 
   const handleApply = (): void => {
