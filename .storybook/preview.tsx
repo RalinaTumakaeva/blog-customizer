@@ -1,10 +1,9 @@
-import { StoryDecorator } from '../src/ui/story-decorator';
-
-import type { Preview } from '@storybook/react-vite';
+import type { Preview } from "@storybook/react";
+import { StoryDecorator } from "../src/components/story-decorator/StoryDecorator";
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         color: /(background|color)$/i,
