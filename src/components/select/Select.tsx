@@ -1,11 +1,10 @@
 import clsxFn from 'clsx';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import arrowDown from 'src/images/arrow-down.svg';
 
 import { Option } from '../radio-group/Option';
 import { Text } from '../text';
 import { isFontFamilyClass } from './helpers/isFontFamilyClass';
-import { useOutsideClickClose } from './hooks/useOutsideClickClose';
 
 import type { MouseEventHandler, FC } from 'react';
 import type { OptionType } from 'src/constants/articleProps';
@@ -17,31 +16,21 @@ type SelectProps = {
   options: OptionType[];
   placeholder?: string;
   onChange?: (selected: OptionType) => void;
-  onClose?: () => void;
   title?: string;
 };
 
 export const Select: FC<SelectProps> = (props: SelectProps) => {
-  const { options, placeholder, selected, onChange, onClose, title } = props;
-  const [isMenuOpen, setIsOpen] = useState<boolean>(false);
-
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const placeholderRef = useRef<HTMLDivElement | null>(null);
-
-  useOutsideClickClose({
-    isMenuOpen,
-    rootRef,
-    onClose,
-    onChange: setIsOpen,
-  });
+  const { options, placeholder, selected, onChange, title } = props;
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const handleOptionClick = (option: OptionType): void => {
-    setIsOpen(false);
+    setIsMenuOpen(false);
     onChange?.(option);
   };
 
-  const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
-    setIsOpen((prev) => !prev);
+  const handlePlaceholderClick: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation();
+    setIsMenuOpen((prev) => !prev);
   };
 
   const status = selected ? 'selected' : 'empty';
@@ -60,7 +49,6 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
 
       <div
         className={styles.selectWrapper}
-        ref={rootRef}
         data-is-active={isMenuOpen}
         data-testid="selectWrapper"
       >
@@ -70,16 +58,16 @@ export const Select: FC<SelectProps> = (props: SelectProps) => {
           className={clsxFn(styles.placeholder, customPlaceholderClass)}
           data-status={status}
           data-selected={!!selected?.value}
-          onClick={handlePlaceHolderClick}
+          onClick={handlePlaceholderClick}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              setIsOpen((prev) => !prev);
+              e.stopPropagation();
+              setIsMenuOpen((prev) => !prev);
             }
           }}
           role="button"
           tabIndex={0}
-          ref={placeholderRef}
         >
           <Text
             family={
